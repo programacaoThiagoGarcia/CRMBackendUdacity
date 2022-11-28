@@ -10,3 +10,8 @@ type Customer struct {
 }
 
 type Customers []Customer
+
+// remove item on database
+func (database Customers) Remove(index int) Customers {
+	return append(database[:index], database[index+1:]...)
+}

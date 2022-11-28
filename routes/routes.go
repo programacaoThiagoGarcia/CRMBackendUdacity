@@ -58,10 +58,4 @@ var routeList = Routes{
 		Pattern:     "/customers/{id}",
 		HandlerFunc: deleteCustomer,
 	},
-	Route{
-		Name:        "index",
-		Method:      "GET",
-		Pattern:     "/",
-		HandlerFunc: index,
-	},
 }

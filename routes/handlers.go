@@ -67,15 +67,61 @@ func addCustomer(w http.ResponseWriter, r *http.Request) {
 
 // UpdateCustomer update customer information
 func updateCustomer(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	var customer model.Customer
+
+	body, err := ioutil.ReadAll(r.Body)
+
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	err = json.Unmarshal(body, &customer)
+
+	if err != nil {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
+	vars := mux.Vars(r)
+	id, _ := strconv.ParseInt(vars["id"], 10, 64)
+
+	for index, item := range dataBase {
+		if item.ID == uint64(id) {
+			customer.ID = uint64(id)
+			dataBase[index] = customer
+			w.WriteHeader(http.StatusOK)
+			json.NewEncoder(w).Encode(dataBase)
+			return
+		}
+	}
+	w.WriteHeader(http.StatusNotFound)
+	json.NewEncoder(w).Encode(map[string]string{"message": "Item not Found"})
 
 }
 
 // DeleteCustomer delete customer information
 func deleteCustomer(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	vars := mux.Vars(r)
+	id, _ := strconv.ParseInt(vars["id"], 10, 64)
+
+	for index, item := range dataBase {
+		if item.ID == uint64(id) {
+			dataBase = dataBase.Remove(index)
+			w.WriteHeader(http.StatusOK)
+			json.NewEncoder(w).Encode(dataBase)
+			return
+		}
+	}
+	w.WriteHeader(http.StatusNotFound)
+	json.NewEncoder(w).Encode(map[string]string{"message": "Item not Found"})
 
 }
 
 // index show Html Index
 func index(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
 
 }
