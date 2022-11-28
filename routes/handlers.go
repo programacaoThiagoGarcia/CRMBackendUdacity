@@ -119,9 +119,3 @@ func deleteCustomer(w http.ResponseWriter, r *http.Request) {
 	json.NewEncoder(w).Encode(map[string]string{"message": "Item not Found"})
 
 }
-
-// index show Html Index
-func index(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "text/html")
-
-}
